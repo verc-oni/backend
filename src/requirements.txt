@@ -65,6 +65,6 @@ secure==0.3.0
 six==1.16.0
 sqlparse==0.4.4
 uritemplate==4.1.1
-urllib3==2.0.7
+urllib3
 vine==5.1.0
 virtualenv==20.26.3
