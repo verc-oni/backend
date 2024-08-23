@@ -1,6 +1,7 @@
 import uuid as uuid_lib
 
 from django.db import models, transaction
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.conf import settings
 from django.utils.crypto import get_random_string
@@ -13,6 +14,18 @@ from core.models import TimestampedModel
 class UserManager(BaseUserManager):
 
     use_in_migration = True
+    
+    def create_user(self, email, password, **extra_fields):
+        if not email:
+            raise ValueError("The given username must be set")
+        email = self.normalize_email(email)
+        # Lookup the real model class from the global app registry so this
+        # manager method can be used in migrations. This is fine because
+        # managers are by definition working on the real model.
+        user = self.model(email=email, **extra_fields)
+        user.password = make_password(password)
+        user.save(using=self._db)
+        return user
 
     def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault("is_staff", True)

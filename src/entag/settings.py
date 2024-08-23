@@ -130,13 +130,13 @@ DATABASES = {
     # settings.py
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
+        "NAME": config("DB_NAME", default='Entag_db_offline'),
+        "USER": config("DB_USER", default='postgres'),
+        "PASSWORD": config("DB_PASSWORD", default='olamifessi@1995'),
         "HOST": (
             config("INTERNAL_DB_URL")
-            if config("DEPLOYMENT_RENDER", cast=bool)
-            else config("EXTERNAL_DB_URL")
+            if config("DEPLOYMENT_RENDER", default=False, cast=bool)
+            else config("EXTERNAL_DB_URL", default='127.0.0.1')
         ),
         "PORT": "5432",
     }
@@ -232,7 +232,7 @@ SIMPLE_JWT = {
     "USER_ID_CLAIM": "user_id",
 }
 
-WEB_TOKEN_EXPIRY = config("WEB_TOKEN_EXPIRY", cast=int)
+WEB_TOKEN_EXPIRY = config("WEB_TOKEN_EXPIRY", cast=int, default = 25)
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 
 CELERY_ENABLED = config("CELERY_ENABLED", default=False, cast=bool)
@@ -276,9 +276,9 @@ AWS_LOCATION = "static"
 
 
 CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": config("CLOUDINARY_CLOUD_NAME"),
-    "API_KEY": config("CLOUDINARY_API_KEY"),
-    "API_SECRET": config("CLOUDINARY_API_SECRET"),
+    "CLOUD_NAME": config("CLOUDINARY_CLOUD_NAME", default=False),
+    "API_KEY": config("CLOUDINARY_API_KEY", default=False),
+    "API_SECRET": config("CLOUDINARY_API_SECRET", default=False),
 }
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
@@ -304,5 +304,5 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 CORS_ALLOW_ALL_ORIGINS = True
-FRONTEND_ADMIN_URL = config("FRONTEND_ADMIN_URL")
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+FRONTEND_ADMIN_URL = config("FRONTEND_ADMIN_URL", default='http://127.0.0.1:8080')
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default=False)
