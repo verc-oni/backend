@@ -66,7 +66,7 @@ class UserRegistrationViewSet(viewsets.GenericViewSet, UserTokenResponseMixin):
     serializer_class = UserCreateSerializer
     permission_classes = [AllowAny]
 
-    def get_serializer_class(self):
+    def get_custom_serializer_class(self):
         user = self.request.user
         if user.is_artist:
             return ArtistProfileSerializer
@@ -185,7 +185,7 @@ class UserRegistrationViewSet(viewsets.GenericViewSet, UserTokenResponseMixin):
     @action(methods=["get"], detail=False, permission_classes=[IsAuthenticated])
     def get_user_profile(self, request, *args, **kwargs):
         user_profile = self.get_user_profile_instance(request.user)
-        serializer_class = self.get_serializer_class()
+        serializer_class = self.get_custom_serializer_class()
         serializer = serializer_class(instance=user_profile)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
