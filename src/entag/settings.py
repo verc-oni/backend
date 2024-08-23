@@ -87,6 +87,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    # 'whitenoise.middleware.WhiteNoiseMiddleware', # white Noise Middleware
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -300,7 +301,9 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:6100",
     "https://waitlist-khaki.vercel.app/",
     "https://backend-yxi1.onrender.com/swagger/",
+    "https://backend-dkpm.onrender.com/swagger/"
 ]
+
 
 
 CORS_ALLOW_ALL_ORIGINS = True
