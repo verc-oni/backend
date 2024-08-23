@@ -87,7 +87,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    # 'whitenoise.middleware.WhiteNoiseMiddleware', # white Noise Middleware
+    'whitenoise.middleware.WhiteNoiseMiddleware', # white Noise Middleware
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -286,9 +286,12 @@ DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
-# STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
-# STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+if config('DEFAULT_STATIC_CONFIG', cast=bool):
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# else:
+#     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
+#     STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 
 # Default primary key field type
