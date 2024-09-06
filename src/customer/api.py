@@ -32,6 +32,30 @@ class CustomerViewSet(viewsets.GenericViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def list_pending(self, request, *args, **kwargs):
+        queryset = self.get_queryset().filter(gigs__status="pending", gigs__customer=request.user)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def list_completed(self, request, *args, **kwargs):
+        queryset = self.get_queryset().filter(gigs__status="completed", gigs__customer=request.user)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def list_active(self, request, *args, **kwargs):
+        queryset = self.get_queryset().filter(gigs__status="accepted", gigs__customer=request.user)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def list_sent(self, request, *args, **kwargs):
+        queryset = self.get_queryset().filter(gigs__customer=request.user)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     @action(
         detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated]
@@ -47,6 +71,8 @@ class CustomerViewSet(viewsets.GenericViewSet):
             artist.update_ranking(review.rating)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 class MessageViewSet(viewsets.ModelViewSet):

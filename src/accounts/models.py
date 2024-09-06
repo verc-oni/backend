@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.conf import settings
 from django.utils.crypto import get_random_string
 
+from cloudinary_storage.storage import MediaCloudinaryStorage
 from cloudinary.models import CloudinaryField
 
 from core.models import TimestampedModel
@@ -68,9 +69,7 @@ class UserProfile(TimestampedModel):
     last_name = models.CharField(max_length=100, default="")
     gender = models.CharField(max_length=100, default="")
     bio = models.TextField(blank=True)
-    profile_picture = CloudinaryField(
-        "image", null=True, blank=True
-    )  # Updated to use Cloudinary
+    profile_picture = models.ImageField(upload_to='image/', null=True, blank=True, storage=MediaCloudinaryStorage)  # Updated to use Cloudinary  # Updated to use Cloudinary
     phone_number = models.CharField(max_length=20, blank=True)
 
     class Meta:
@@ -116,9 +115,7 @@ class ArtistData(TimestampedModel):
 # Artist profile model
 class ArtistProfile(UserProfile):
     genres = models.ManyToManyField(Genre, related_name="artist_profile")
-    samples = CloudinaryField(
-        "file", null=True, blank=True
-    )  # Updated to use Cloudinary
+    samples = models.FileField(upload_to='file/', blank=True)  # Updated to use Cloudinary
 
     price_per_service = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.0, null=True

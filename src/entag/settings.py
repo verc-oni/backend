@@ -69,8 +69,8 @@ INSTALLED_APPS = [
     "django_filters",
     "simple_history",
     # "storages",
-    "cloudinary",
     "cloudinary_storage",
+    "cloudinary",
     # "allauth",
     # "allauth.account",
     # "allauth.socialaccount",
@@ -276,12 +276,16 @@ AWS_LOCATION = "static"
 
 
 CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": config("CLOUDINARY_CLOUD_NAME", default=False),
-    "API_KEY": config("CLOUDINARY_API_KEY", default=False),
-    "API_SECRET": config("CLOUDINARY_API_SECRET", default=False),
+    "CLOUDINARY_URL": config("CLOUDINARY_URL",  default="cloudinary://697657711537742:hIqAKf4vyuFUsgyT6MBr0vy7HuU@dmrsj9bpr"),
+    "CLOUD_NAME": config("CLOUDINARY_CLOUD_NAME", default="dmrsj9bpr"),
+    "API_KEY": config("CLOUDINARY_API_KEY", default="697657711537742"),
+    "API_SECRET": config("CLOUDINARY_API_SECRET", default="hIqAKf4vyuFUsgyT6MBr0vy7HuU"),
 }
 
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+IMAGE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = FILE_STORAGE
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
