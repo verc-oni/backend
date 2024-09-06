@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from accounts.models import CustomerProfile
+from accounts.models import ArtistProfile, CustomerProfile, Genre
 from .models import ArtistReview, Gig, Message
 
 

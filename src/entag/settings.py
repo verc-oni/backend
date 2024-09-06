@@ -309,4 +309,14 @@ CSRF_TRUSTED_ORIGINS = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 FRONTEND_ADMIN_URL = config("FRONTEND_ADMIN_URL", default='http://127.0.0.1:8080')
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default=False)
+
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = config('EMAIL_PORT', default=465, cast=int)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool, default=False)  # Use EMAIL_PORT 587 for TLS
+EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool, default=True)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', cast=str, default=None)
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', cast=str, default='<google-app-password>')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+

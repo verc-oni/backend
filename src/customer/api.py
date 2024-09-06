@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from accounts.models import ArtistProfile
+from accounts.models import ArtistProfile, Genre
 from accounts.serializers import ArtistProfileSerializer
 from customer.models import Gig, Message
 from customer.serializers import (
@@ -57,11 +57,11 @@ class CustomerViewSet(viewsets.GenericViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], permission_classes=[permissions.AllowAny])
     def list_categories_data(self, request, *args, **kwargs):
-        queryset = self.get_queryset().filter(gigs__customer=request.user)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        genres = Genre.objects.all()
+        data = [{"name": genre.name, "count": ArtistProfile.objects.filter(genres=genre).count()} for genre in genres]
+        return Response(data=data)
 
     @action(
         detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated]
