@@ -56,6 +56,12 @@ class CustomerViewSet(viewsets.GenericViewSet):
         queryset = self.get_queryset().filter(gigs__customer=request.user)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def list_categories_data(self, request, *args, **kwargs):
+        queryset = self.get_queryset().filter(gigs__customer=request.user)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     @action(
         detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated]
@@ -72,7 +78,7 @@ class CustomerViewSet(viewsets.GenericViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+    
 
 
 class MessageViewSet(viewsets.ModelViewSet):
