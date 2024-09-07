@@ -150,12 +150,21 @@ class UserAccountDetailSerializer(serializers.Serializer):
     artist = ArtistProfileSerializer(read_only=True)
     customer = CustomerProfileSerializer(read_only=True)
     
+    def get_profile_serializer(self, user):
+        if user.is_admin:
+            return AdminProfileSerializer(user.adminprofile, read_only=True)
+        elif user.is_artist:
+            return ArtistProfileSerializer(user.artistprofile, read_only=True)
+        elif user.is_customer:
+            return CustomerProfileSerializer(user.customerprofile, read_only=True)
+        return None
+    
     def to_representation(self, instance):
+        profile = self.get_profile_serializer(instance)
         data = {
             'account': UserFullDetailSerializer(instance=instance).data,
-            'profile': ""
+            'profile': profile.data
         }
-        
         return data
     
     
