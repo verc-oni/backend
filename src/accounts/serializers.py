@@ -84,31 +84,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
             )
 
 
+
 # class UserDetailsSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = User
 #         fields = ["id", "email", "username", "is_admin", "date_joined", "is_staff"]
 
-
-# class UserProfileSerializer(serializers.ModelSerializer):
-#     user = UserDetailsSerializer(read_only=True)
-
-#     class Meta:
-#         model = UserProfile
-#         fields = [
-#             "id",
-#             "user",
-#             "first_name",
-#             "last_name",
-#             "bio",
-#             "phone_number",
-#             "is_artist",
-#             "profile_picture",
-#         ]
-
-#     def to_representation(self, instance):
-#         representation = super().to_representation(instance)
-#         return representation
 
 
 # class UserProfileCreateSerializer(serializers.ModelSerializer):
@@ -147,6 +128,37 @@ class AdminProfileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+
+class UserFullDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "username",
+            "is_admin",
+            "is_artist",
+            "is_customer",
+        ]
+
+        
+class UserAccountDetailSerializer(serializers.Serializer):
+    account = UserFullDetailSerializer(read_only=True)
+    admin = AdminProfileSerializer(read_only=True)
+    artist = ArtistProfileSerializer(read_only=True)
+    customer = CustomerProfileSerializer(read_only=True)
+    
+    def to_representation(self, instance):
+        data = {
+            'account': UserFullDetailSerializer(instance=instance).data
+            'profile'
+        }
+        
+        return data
+    
+    
 class UserDetailsTokenSerializer(serializers.Serializer):
     access_token = serializers.CharField()
     refresh_token = serializers.CharField()

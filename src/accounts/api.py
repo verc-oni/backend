@@ -182,12 +182,14 @@ class UserRegistrationViewSet(viewsets.GenericViewSet, UserTokenResponseMixin):
             status=status.HTTP_200_OK,
         )
 
+    @swagger_auto_schema(
+        request_body=AdminProfileSerializer, responses={200: AdminProfileSerializer}
+    )
     @action(methods=["get"], detail=False, permission_classes=[IsAuthenticated])
-    def get_user_profile(self, request, *args, **kwargs):
+    def get_user_details(self, request, *args, **kwargs):
         user_profile = self.get_user_profile_instance(request.user)
         serializer_class = self.get_serializer_class()
         serializer = serializer_class(instance=user_profile)
-
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_user_profile(self, user):
@@ -229,6 +231,7 @@ class UserRegistrationViewSet(viewsets.GenericViewSet, UserTokenResponseMixin):
         )
 
         return Response("Verification request received")
+
 
 
 class AdminInvitationViewSet(viewsets.ModelViewSet):
