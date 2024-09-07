@@ -43,13 +43,7 @@ class ArtistApplication(TimestampedModel):
             self.notify_admin()
 
     def notify_admin(self):
-        send_mail(
-            "New Artist Application Submitted",
-            f"Artist {self.name} has submitted an application.",
-            "from@example.com",
-            ["admin@example.com"],
-            fail_silently=False,
-        )
+        # send_mail("New Artist Application Submitted",f"Artist {self.name} has submitted an application.","from@example.com",["admin@example.com"],fail_silently=False)
 
 
 class Gig(TimestampedModel):
