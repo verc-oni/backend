@@ -205,7 +205,7 @@ class AdminInvitationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         invitation = AdminInvitation.objects.create(**validated_data)
         # Send email to the invitee with the invitation code/link
-        send_admin_invitation_email(invitation)
+        # send_admin_invitation_email(invitation)
         return invitation
 
 
