@@ -152,8 +152,8 @@ class UserAccountDetailSerializer(serializers.Serializer):
     
     def to_representation(self, instance):
         data = {
-            'account': UserFullDetailSerializer(instance=instance).data
-            'profile'
+            'account': UserFullDetailSerializer(instance=instance).data,
+            'profile': ""
         }
         
         return data
