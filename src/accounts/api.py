@@ -46,7 +46,7 @@ class UserTokenResponseMixin:
     def get_user_token_response_data(self, user):
         refresh_token = RefreshToken.for_user(user)
         access_token = refresh_token.access_token
-        access_token.set_exp(lifetime=timedelta(minutes=settings.WEB_TOKEN_EXPIRY))
+        access_token.set_exp(lifetime=timedelta(days=settings.WEB_TOKEN_EXPIRY))
 
         # if user.is_artist:
         #     user_profile = user.artistprofile_set
