@@ -67,7 +67,7 @@ class UserRegistrationViewSet(viewsets.GenericViewSet, UserTokenResponseMixin):
     serializer_class = UserCreateSerializer
     permission_classes = [AllowAny]
 
-    def get_serializer_class(self):
+    def get_custom_serializer_class(self):
         user = self.request.user
         if user.is_artist:
             return ArtistProfileSerializer
