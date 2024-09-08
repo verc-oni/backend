@@ -115,7 +115,7 @@ class ArtistData(TimestampedModel):
 # Artist profile model
 class ArtistProfile(UserProfile):
     genres = models.ManyToManyField(Genre, related_name="artist_profile")
-    samples = models.FileField(upload_to='file/', blank=True)  # Updated to use Cloudinary
+    samples = models.FileField(upload_to='file/', blank=True, null=True)  # Updated to use Cloudinary
 
     price_per_service = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.0, null=True
