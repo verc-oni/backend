@@ -62,7 +62,7 @@ class UserTokenResponseMixin:
         return UserDetailsTokenSerializer(data, context={"request": self.request}).data
 
 
-class UserRegistrationViewSet(viewsets.GenericViewSet, UserTokenResponseMixin):
+class UserRegistrationViewSet(viewsets.GenericViewSet, UserTokenResponseMixin, mixins.ListModelMixin):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
     permission_classes = [AllowAny]
@@ -96,8 +96,6 @@ class UserRegistrationViewSet(viewsets.GenericViewSet, UserTokenResponseMixin):
                 "user": UserCreateSerializer(
                     user, context=self.get_serializer_context()
                 ).data,
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
             },
             status=status.HTTP_201_CREATED,
         )
