@@ -69,8 +69,8 @@ INSTALLED_APPS = [
     "django_filters",
     "simple_history",
     # "storages",
-    "cloudinary_storage",
     "cloudinary",
+    "cloudinary_storage",
     # "allauth",
     # "allauth.account",
     # "allauth.socialaccount",
@@ -87,6 +87,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware', # white Noise Middleware
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -276,26 +277,21 @@ AWS_LOCATION = "static"
 
 
 CLOUDINARY_STORAGE = {
-    "CLOUDINARY_URL": config("CLOUDINARY_URL",  default="cloudinary://697657711537742:hIqAKf4vyuFUsgyT6MBr0vy7HuU@dmrsj9bpr"),
-    "CLOUD_NAME": config("CLOUDINARY_CLOUD_NAME", default="dmrsj9bpr"),
-    "API_KEY": config("CLOUDINARY_API_KEY", default="697657711537742"),
-    "API_SECRET": config("CLOUDINARY_API_SECRET", default="hIqAKf4vyuFUsgyT6MBr0vy7HuU"),
+    "CLOUD_NAME": config("CLOUDINARY_CLOUD_NAME", default=False),
+    "API_KEY": config("CLOUDINARY_API_KEY", default=False),
+    "API_SECRET": config("CLOUDINARY_API_SECRET", default=False),
 }
 
-
-IMAGE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
-DEFAULT_FILE_STORAGE = FILE_STORAGE
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
 if config('DEFAULT_STATIC_CONFIG', cast=bool, default=False):
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
-# STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# else:
+#     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
+#     STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 
 # Default primary key field type
@@ -308,19 +304,11 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:6100",
     "https://waitlist-khaki.vercel.app/",
     "https://backend-yxi1.onrender.com/swagger/",
+    "https://backend-dkpm.onrender.com/swagger/"
 ]
+
 
 
 CORS_ALLOW_ALL_ORIGINS = True
 FRONTEND_ADMIN_URL = config("FRONTEND_ADMIN_URL", default='http://127.0.0.1:8080')
-
-EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
-EMAIL_PORT = config('EMAIL_PORT', default=465, cast=int)
-EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool, default=False)  # Use EMAIL_PORT 587 for TLS
-EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool, default=True)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', cast=str, default=None)
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', cast=str, default='<google-app-password>')
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default=False)
