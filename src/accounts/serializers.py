@@ -114,6 +114,17 @@ class ArtistProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArtistProfile
         fields = "__all__"
+        
+
+class ArtisProfileDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArtistProfile
+        exclude = ['profile_picture', 'samples']
+
+class ArtisProfileDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArtistProfile
+        fields = ['profile_picture', 'samples']
 
 
 class CustomerProfileSerializer(serializers.ModelSerializer):

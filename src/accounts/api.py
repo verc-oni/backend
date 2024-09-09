@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework_simplejwt.exceptions import TokenError
@@ -30,6 +31,8 @@ from core.utils import encrypt_for_db
 from .serializers import (
     AdminInvitationSerializer,
     AdminProfileSerializer,
+    ArtisProfileDataSerializer,
+    ArtisProfileDocumentSerializer,
     ArtistProfileSerializer,
     CustomerProfileSerializer,
     UserAccountDetailSerializer,
@@ -66,6 +69,7 @@ class UserRegistrationViewSet(viewsets.GenericViewSet, UserTokenResponseMixin, m
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
     permission_classes = [AllowAny]
+
 
     def get_custom_serializer_class(self):
         user = self.request.user
@@ -122,24 +126,44 @@ class UserRegistrationViewSet(viewsets.GenericViewSet, UserTokenResponseMixin, m
 
     @action(methods=["put"], detail=False, permission_classes=[IsAuthenticated])
     @swagger_auto_schema(
-        request_body=ArtistProfileSerializer, responses={200: ArtistProfileSerializer}
+        request_body=ArtisProfileDataSerializer, responses={200: ArtisProfileDataSerializer}
     )
     @transaction.atomic
-    def update_artist_user_profile(self, request, *args, **kwargs):
+    def update_artist_user_profile_data(self, request, *args, **kwargs):
         user_profile = self.get_user_profile(request.user)
 
         # Update the existing user profile with the new data
-        serializer = ArtistProfileSerializer(
+        serializer = ArtisProfileDataSerializer(
             instance=user_profile, data=request.data, partial=True
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
         return Response(
-            data=ArtistProfileSerializer(instance=user_profile).data,
+            data=ArtisProfileDataSerializer(instance=user_profile).data,
             status=status.HTTP_200_OK,
         )
 
+    @action(methods=["put"], detail=False, permission_classes=[IsAuthenticated], parser_classes=[MultiPartParser])
+    @swagger_auto_schema(
+        request_body=ArtisProfileDocumentSerializer, responses={200: ArtisProfileDocumentSerializer}
+    )
+    @transaction.atomic
+    def update_artist_user_profile_document(self, request, *args, **kwargs):
+        user_profile = self.get_user_profile(request.user)
+
+        # Update the existing user profile with the new data
+        serializer = ArtisProfileDocumentSerializer(
+            instance=user_profile, data=request.data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(
+            data=ArtisProfileDocumentSerializer(instance=user_profile).data,
+            status=status.HTTP_200_OK,
+        )
+    
     @action(methods=["put"], detail=False, permission_classes=[IsAuthenticated])
     @swagger_auto_schema(
         request_body=CustomerProfileSerializer,
