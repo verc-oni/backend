@@ -131,7 +131,7 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerProfile
         fields = "__all__"
-
+   
 
 class AdminProfileSerializer(serializers.ModelSerializer):
     class Meta:

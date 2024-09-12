@@ -164,7 +164,7 @@ class UserRegistrationViewSet(viewsets.GenericViewSet, UserTokenResponseMixin, m
             status=status.HTTP_200_OK,
         )
     
-    @action(methods=["put"], detail=False, permission_classes=[IsAuthenticated])
+    @action(methods=["put"], detail=False, permission_classes=[IsAuthenticated],  parser_classes=[MultiPartParser])
     @swagger_auto_schema(
         request_body=CustomerProfileSerializer,
         responses={200: CustomerProfileSerializer},
